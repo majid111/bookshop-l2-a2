@@ -1,11 +1,21 @@
 import { Request, Response } from 'express';
 import { BookServices } from './book.service';
+import bookValidationSchema from './book.validate';
 
 const createBook = async (req: Request, res: Response) => {
   try {
     const { book: bookData } = req.body;
-    // console.log('req.body:', req.body);clear
-    const result = await BookServices.createBookIntoDB(bookData);
+    // console.log('req.body:', req.body);
+    const zodParseData = bookValidationSchema.parse(bookData);
+
+    const result = await BookServices.createBookIntoDB(zodParseData);
+    if (error) {
+      res.status(500).json({
+        success: false,
+        message: 'something went wrong',
+        data: error.details,
+      });
+    }
 
     res.status(200).json({
       success: true,

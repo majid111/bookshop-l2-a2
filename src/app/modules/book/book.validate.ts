@@ -3,13 +3,16 @@ import { z } from 'zod';
 const AuthorNameSchema = z.object({
   firstName: z
     .string()
-    .min(3, { message: 'First name can not be less than 3 characters' }),
+    .min(3, { message: 'First name can not be less than 3 characters' })
+    .max(20, { message: 'First name can not be more than 20 characters' }),
   middleName: z
     .string()
-    .min(3, { message: 'Middle name can not be less than 3 characters' }),
+    .min(3, { message: 'Middle name can not be less than 3 characters' })
+    .max(20, { message: 'Middle name can not be more than 20 characters' }),
   lastName: z
     .string()
-    .min(3, { message: 'Last name can not be less than 3 characters' }),
+    .min(3, { message: 'Last name can not be less than 3 characters' })
+    .max(20, { message: 'Last name can not be more than 20 characters' }),
 });
 
 // Book Schema
@@ -18,36 +21,23 @@ const bookValidationSchema = z.object({
     .string()
     .min(3, { message: 'Title can not be less than 3 characters' })
     .max(20, { message: 'Title can not be more than 3 characters' }),
-  author: z
-    .string()
-    .min(3, { message: 'Author name can not be less than 3 characters' })
-    .max(20, { message: 'Author name can not be more than 3 characters' }),
-  price: {
-    type: Number,
-    required: [true, 'Book price is required.'],
-    min: [0, 'Book price cannot be negative.'],
-  },
-  category: {
-    type: String,
-    enum: {
-      values: ['Fiction', 'Science', 'SelfDevelopment', 'Poetry', 'Religious'],
+  author: AuthorNameSchema,
+  price: z.number(),
+  category: z.enum(
+    ['Fiction', 'Science', 'SelfDevelopment', 'Poetry', 'Religious'],
+    {
       message:
         "Category must be one of 'Fiction', 'Science', 'SelfDevelopment', 'Poetry', or 'Religious'.",
     },
-    required: [true, 'Book category is required.'],
-  },
-  description: {
-    type: String,
-    required: [true, 'Book description is required.'],
-    minlength: [10, 'Description must be at least 10 characters long.'],
-  },
-  quantity: {
-    type: Number,
-    required: [true, 'Book quantity is required.'],
-    min: [0, 'Quantity cannot be negative.'],
-  },
-  inStock: {
-    type: Boolean,
-    required: [true, 'In-stock status is required.'],
-  },
+  ),
+  description: z
+    .string()
+    .min(10, { message: 'Author name can not be less than 3 characters' })
+    .max(200, { message: 'Author name can not be more than 3 characters' }),
+  quantity: z.number().min(0, { message: 'Book quantity is required.' }),
+  inStock: z.boolean({
+    message: 'Author name can not be more than 3 characters',
+  }),
 });
+
+export default bookValidationSchema;

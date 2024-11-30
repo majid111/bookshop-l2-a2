@@ -22,7 +22,7 @@ const bookValidationSchema = z.object({
     .min(3, { message: 'Title can not be less than 3 characters' })
     .max(20, { message: 'Title can not be more than 3 characters' }),
   author: AuthorNameSchema,
-  price: z.number(),
+  price: z.number().min(0, { message: 'Price should be grater than 0' }),
   category: z.enum(
     ['Fiction', 'Science', 'SelfDevelopment', 'Poetry', 'Religious'],
     {
@@ -35,9 +35,11 @@ const bookValidationSchema = z.object({
     .min(10, { message: 'Author name can not be less than 3 characters' })
     .max(200, { message: 'Author name can not be more than 3 characters' }),
   quantity: z.number().min(0, { message: 'Book quantity is required.' }),
-  inStock: z.boolean({
-    message: 'Author name can not be more than 3 characters',
-  }),
+  inStock: z
+    .boolean({
+      message: 'Author name can not be more than 3 characters',
+    })
+    .default(true),
 });
 
 export default bookValidationSchema;
